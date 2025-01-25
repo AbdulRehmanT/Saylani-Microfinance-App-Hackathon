@@ -9,7 +9,7 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="text-xl font-bold">
-          <Image src="/logo.png" width={200} height={40} />
+          <Image src="/logo.png" width={200} height={40} alt="logo" />
         </div>
 
         {/* Navigation Links */}

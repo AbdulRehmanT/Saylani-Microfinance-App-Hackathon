@@ -1,6 +1,6 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const LoanCalculator = ({ selectedCategory }) => {
   // Define loan categories and their properties
@@ -45,6 +45,27 @@ const LoanCalculator = ({ selectedCategory }) => {
   const [initialDeposit, setInitialDeposit] = useState(0); // Initial deposit input
   const [monthlyEMI, setMonthlyEMI] = useState(0); // Monthly EMI
 
+  // Function to calculate the EMI
+  const calculateEMI = (loanAmount, initialDeposit) => {
+    const annualInterestRate = 10;
+    const monthlyInterestRate = annualInterestRate / 100 / 12;
+    const loanPrincipal = loanAmount - initialDeposit;
+    const totalPayments = categoryDetails.loanPeriod * 12; // Loan period in months
+
+    // EMI Calculation
+    const emi = (loanPrincipal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalPayments)) / (Math.pow(1 + monthlyInterestRate, totalPayments) - 1);
+
+    return emi;
+  };
+
+  // Automatically calculate EMI whenever loan amount or deposit changes
+  useEffect(() => {
+    if (loanAmount && initialDeposit >= 0) {
+      const emi = calculateEMI(loanAmount, initialDeposit);
+      setMonthlyEMI(emi);
+    }
+  }, [loanAmount, initialDeposit]);
+
   // Handle loan amount changes and update the loan after deposit (no deposit logic now)
   const handleLoanAmountChange = (e) => {
     const value = e.target.value;
@@ -67,24 +88,18 @@ const LoanCalculator = ({ selectedCategory }) => {
     }
   };
 
-  // Function to calculate the EMI
-  const calculateEMI = () => {
-    // Assuming an annual interest rate of 10%
-    const annualInterestRate = 10;
-    const monthlyInterestRate = annualInterestRate / 100 / 12;
-    const loanPrincipal = loanAmount - initialDeposit;
-    const totalPayments = categoryDetails.loanPeriod * 12; // Loan period in months
-
-    // EMI Calculation
-    const emi = (loanPrincipal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalPayments)) / (Math.pow(1 + monthlyInterestRate, totalPayments) - 1);
-
-    setMonthlyEMI(emi);
-  };
-
   // Use the Next.js router to redirect after form submission
   const router = useRouter();
+
+  // Check if user is logged in (replace with your logic)
+  const isLoggedIn = false;  // Replace with actual login check
+
   const handleApplyLoan = () => {
-    router.push("/registration"); // Assuming the registration page is at /registration
+    if (isLoggedIn) {
+      router.push("/loan-request");  // Redirect to loan request page if logged in
+    } else {
+      router.push("/registration");  // Redirect to registration page if not logged in
+    }
   };
 
   return (
@@ -147,12 +162,6 @@ const LoanCalculator = ({ selectedCategory }) => {
           <h4 className="font-semibold text-lg">Loan Breakdown</h4>
           <p>Loan Amount: PKR {loanAmount.toLocaleString()}</p>
           <p>Initial Deposit: PKR {initialDeposit.toLocaleString()}</p>
-          <button
-            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            onClick={calculateEMI}
-          >
-            Calculate EMI
-          </button>
         </div>
       )}
 
