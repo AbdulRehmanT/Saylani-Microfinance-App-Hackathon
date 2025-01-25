@@ -14,24 +14,32 @@ const LoanCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
-    <section className="py-12">
+    <section className="py-12 bg-gray-50">
       <div className="container mx-auto text-center">
-        <h2 className="text-2xl mb-8">Loan Categories</h2>
+        <h2 className="text-3xl font-bold mb-8 text-gray-800">Loan Categories</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => (
             <div
               key={index}
-              className="bg-gray-200 py-8 px-4 rounded-lg transition duration-300 border border-gray-300 cursor-pointer"
+              className={`bg-white py-8 px-6 rounded-lg shadow-lg border-2 border-transparent transition-all duration-300 hover:scale-105 hover:border-green-600 cursor-pointer ${
+                selectedCategory === category.name ? 'border-green-600' : 'border-gray-300'
+              }`}
               onClick={() => setSelectedCategory(category.name)} // Set the category on click
             >
-              <h3 className="text-lg">{category.name}</h3>
-              <Link href="#">Get Loan</Link>
+              <h3 className="text-xl font-semibold text-gray-700">{category.name}</h3>
+              <p className="text-green-600 mt-4 hover:underline">
+                <Link href="#">Get Loan</Link>
+              </p>
             </div>
           ))}
         </div>
         
         {/* Conditionally render Loan Calculator */}
-        {selectedCategory && <LoanCalculator selectedCategory={selectedCategory} />}
+        {selectedCategory && (
+          <div className="mt-10 p-6 bg-white shadow-xl rounded-lg">
+            <LoanCalculator selectedCategory={selectedCategory} />
+          </div>
+        )}
       </div>
     </section>
   );
