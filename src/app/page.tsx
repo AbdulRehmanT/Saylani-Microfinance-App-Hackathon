@@ -1,31 +1,24 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
+import LoanCategories from "@/components/loan-categories";
 import LoanCalculator from "@/components/loan-calculator";
-import LoanCategoryCard from "@/components/loan-category-card";
 
-export default function Home() {
+const Home = () => {
   return (
     <div>
       <Header />
+      <main>
+        <section className="py-12 text-center">
+          <h1 className="text-3xl font-semibold">Welcome to Saylani Welfare</h1>
+          <p className="mt-4">We are here to help you with your loan needs. Choose a category and calculate your loan today!</p>
+        </section>
 
-      <section className="loan-categories mt-12">
-        <h2 className="text-4xl font-semibold text-center text-gray-800 mb-10">
-          Loan Categories
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          <LoanCategoryCard category="Wedding" link="/wedding-loan" />
-          <LoanCategoryCard category="Home Construction" link="/home-loan" />
-          <LoanCategoryCard category="Business Startup" link="/business-loan" />
-          <LoanCategoryCard category="Education" link="/education-loan" />
-        </div>
-      </section>
-
-      <section className="loan-calculator mt-12 bg-gray-50 p-8 rounded-lg shadow-md">
-        <LoanCalculator />
-      </section>
-
+        <LoanCategories />
+        <LoanCalculator selectedCategory={undefined} />
+      </main>
       <Footer />
     </div>
   );
-}
+};
+
+export default Home;

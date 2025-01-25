@@ -1,20 +1,40 @@
-import Link from "next/link";
+// components/Header.js
 
-export default function Header() {
+import Link from "next/link";
+import Image from "next/image";
+
+const Header = () => {
   return (
-    <header className="flex justify-between items-center p-5 bg-gray-800 text-white">
-      <img src="/saylani-logo.png" alt="Saylani Welfare" className="w-32" />
-      <nav className="space-x-4">
-        <Link href="/" className="hover:text-green-500">
-          Home
-        </Link>
-        <Link href="/about" className="hover:text-green-500">
-          About Us
-        </Link>
-        <Link href="/contact" className="hover:text-green-500">
-          Contact Us
-        </Link>
-      </nav>
+    <header className="p-4 border">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <div className="text-xl font-bold">
+          <Image src="/logo.png" width={200} height={40} />
+        </div>
+
+        {/* Navigation Links */}
+        <nav>
+          <ul className="flex space-x-6">
+            <li>
+              <Link href="/" className="hover:underline">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/about" className="hover:underline">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className="hover:underline">
+                Contact Us
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
-}
+};
+
+export default Header;

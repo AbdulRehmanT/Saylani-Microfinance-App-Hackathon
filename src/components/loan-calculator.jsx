@@ -1,167 +1,133 @@
-'use client'
-import { useState } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 
-export default function LoanCalculator() {
-  const [category, setCategory] = useState('');
-  const [subcategory, setSubcategory] = useState('');
+const LoanCalculator = ({ selectedCategory }) => {
   const [deposit, setDeposit] = useState('');
   const [loanPeriod, setLoanPeriod] = useState('');
-  const [loanEstimate, setLoanEstimate] = useState(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState('');
+  const [loanBreakdown, setLoanBreakdown] = useState(null);
 
-  // Subcategories based on selected category
-  const subcategories = {
-    Wedding: ['Valima', 'Jahez'],
-    Home: ['Construction', 'Renovation'],
-    Business: ['Startup', 'Expansion'],
-    Education: ['University', 'Vocational Training'],
-  };
+  const categories = [
+    { 
+      name: 'Wedding Loans', 
+      maxLoan: 500000, 
+      loanPeriod: 3, 
+      subcategories: ['Valima', 'Furniture', 'Valima Food', 'Jahez']
+    },
+    { 
+      name: 'Home Construction Loans', 
+      maxLoan: 1000000, 
+      loanPeriod: 5, 
+      subcategories: ['Structure', 'Finishing', 'Loan']
+    },
+    { 
+      name: 'Business Startup Loans', 
+      maxLoan: 1000000, 
+      loanPeriod: 5, 
+      subcategories: ['Buy Stall', 'Advance Rent for Shop', 'Shop Assets', 'Shop Machinery']
+    },
+    { 
+      name: 'Education Loans', 
+      maxLoan: 'Based on requirement', 
+      loanPeriod: 4, 
+      subcategories: ['University Fees', 'Child Fees Loan']
+    }
+  ];
 
-  const handleCalculate = () => {
-    if (!deposit || !loanPeriod || !category || !subcategory) {
-      alert('Please fill in all fields');
+  const selectedCategoryData = categories.find(cat => cat.name === selectedCategory);
+
+  useEffect(() => {
+    setSelectedSubcategory(''); // Reset subcategory when category changes
+  }, [selectedCategory]);
+
+  const calculateLoan = () => {
+    if (!selectedCategoryData) {
+      // If selectedCategoryData is undefined, prevent further calculations
       return;
     }
 
-    // Example loan calculation with interest
-    const principal = parseInt(deposit);
-    const years = parseInt(loanPeriod);
-    const interest = principal * 0.1; // Simple interest (10% for example)
-    const totalRepayment = principal + interest;
+    if (deposit && loanPeriod && selectedSubcategory) {
+      // Ensure deposit is within the maxLoan limit for the selected category
+      if (parseFloat(deposit) > selectedCategoryData.maxLoan) {
+        alert(`Maximum loan limit for ${selectedCategory} is ${selectedCategoryData.maxLoan}`);
+        return;
+      }
 
-    setLoanEstimate({
-      principal,
-      interest,
-      totalRepayment,
-      monthlyRepayment: totalRepayment / (years * 12),
-    });
+      // Simple loan calculation without interest (deposit * loanPeriod)
+      const totalLoan = parseFloat(deposit) * parseInt(loanPeriod);
+      setLoanBreakdown({
+        totalLoan: totalLoan.toFixed(2),
+        monthlyPayment: (totalLoan / (loanPeriod * 12)).toFixed(2),
+      });
+    }
   };
 
+  // If no category is selected, display a message and return
+  if (!selectedCategoryData) {
+    return <div className="text-center text-red-500">Please select a valid category to calculate the loan.</div>;
+  }
+
   return (
-    <div className="text-center mt-10 p-8 bg-gray-100 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-6">Loan Calculator</h2>
+    <section className="py-12">
+      <div className="container mx-auto text-center">
+        <h2 className="text-2xl font-semibold mb-6">Loan Calculator for {selectedCategory}</h2>
 
-      {/* Category & Subcategory Selector */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <label htmlFor="category" className="block text-lg font-semibold mb-2">
-            Select Loan Category
-          </label>
+        {/* Subcategory Selection */}
+        <div className="mb-6">
           <select
-            id="category"
-            value={category}
-            onChange={(e) => {
-              setCategory(e.target.value);
-              setSubcategory('');
-            }}
-            className="w-full p-3 border rounded shadow-sm"
+            value={selectedSubcategory}
+            onChange={(e) => setSelectedSubcategory(e.target.value)}
+            className="p-2 border border-gray-300 rounded-lg mr-4"
           >
-            <option value="">--Select Category--</option>
-            <option value="Wedding">Wedding</option>
-            <option value="Home">Home</option>
-            <option value="Business">Business</option>
-            <option value="Education">Education</option>
+            <option value="">Select Subcategory</option>
+            {selectedCategoryData.subcategories.map((sub, idx) => (
+              <option key={idx} value={sub}>
+                {sub}
+              </option>
+            ))}
           </select>
         </div>
 
-        <div>
-          <label htmlFor="subcategory" className="block text-lg font-semibold mb-2">
-            Select Subcategory
-          </label>
-          <select
-            id="subcategory"
-            value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
-            className="w-full p-3 border rounded shadow-sm"
-            disabled={!category}
-          >
-            <option value="">--Select Subcategory--</option>
-            {category &&
-              subcategories[category].map((sub, index) => (
-                <option key={index} value={sub}>
-                  {sub}
-                </option>
-              ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Deposit and Loan Period Inputs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <div>
-          <label htmlFor="deposit" className="block text-lg font-semibold mb-2">
-            Initial Deposit (PKR)
-          </label>
+        {/* Initial Deposit and Loan Period */}
+        <div className="mb-6">
           <input
             type="number"
-            id="deposit"
+            className="p-2 border border-gray-300 rounded-lg mr-4"
+            placeholder="Initial Deposit"
             value={deposit}
             onChange={(e) => setDeposit(e.target.value)}
-            className="w-full p-3 border rounded shadow-sm"
-            placeholder="Enter deposit amount"
           />
-        </div>
-
-        <div>
-          <label htmlFor="loanPeriod" className="block text-lg font-semibold mb-2">
-            Loan Period (Years)
-          </label>
           <select
-            id="loanPeriod"
+            className="p-2 border border-gray-300 rounded-lg"
             value={loanPeriod}
             onChange={(e) => setLoanPeriod(e.target.value)}
-            className="w-full p-3 border rounded shadow-sm"
           >
-            <option value="">--Select Loan Period--</option>
-            <option value="3">3 Years</option>
-            <option value="5">5 Years</option>
-            <option value="7">7 Years</option>
-            <option value="10">10 Years</option>
+            <option value="">Select Loan Period</option>
+            <option value="3">3 years</option>
+            <option value="5">5 years</option>
+            <option value="4">4 years</option>
           </select>
         </div>
-      </div>
 
-      {/* Calculate Button */}
-      <div className="text-center mb-6">
+        {/* Calculate Button */}
         <button
-          onClick={handleCalculate}
-          className="px-6 py-3 bg-blue-500 text-white rounded shadow-lg hover:bg-blue-700 transition"
+          onClick={calculateLoan}
+          className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition duration-300"
         >
-          Calculate
+          Calculate Loan
         </button>
-      </div>
 
-      {/* Loan Breakdown */}
-      {loanEstimate && (
-        <div className="loan-breakdown bg-gray-100 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-4">Loan Breakdown</h2>
-          <table className="min-w-full table-auto text-left">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">Description</th>
-                <th className="px-4 py-2">Amount (PKR)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="px-4 py-2 font-medium">Principal</td>
-                <td className="px-4 py-2">{loanEstimate.principal}</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-medium">Interest (10%)</td>
-                <td className="px-4 py-2">{loanEstimate.interest}</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-medium">Total Repayment</td>
-                <td className="px-4 py-2">{loanEstimate.totalRepayment}</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-2 font-medium">Monthly Repayment</td>
-                <td className="px-4 py-2">{loanEstimate.monthlyRepayment.toFixed(2)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+        {/* Display Loan Breakdown */}
+        {loanBreakdown && (
+          <div className="mt-8 p-4 border border-gray-300 rounded-lg">
+            <h3 className="text-xl font-semibold">Loan Breakdown:</h3>
+            <p>Total Loan: Rs {loanBreakdown.totalLoan}</p>
+            <p>Monthly Payment: Rs {loanBreakdown.monthlyPayment}</p>
+          </div>
+        )}
+      </div>
+    </section>
   );
-}
+};
+
+export default LoanCalculator;

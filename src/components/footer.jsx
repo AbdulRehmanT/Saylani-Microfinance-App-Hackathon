@@ -1,9 +1,17 @@
-export default function Footer() {
-    return (
-      <footer className="text-center p-6 bg-gray-800 text-white mt-10">
-        <p>Contact us: contact@saylani.org</p>
-        <a href="/privacy-policy" className="text-green-500 hover:text-green-700">Privacy Policy</a>
-      </footer>
-    );
-  }
-  
+import Link from "next/link";
+
+const Footer = () => {
+  return (
+    <footer className="bg-gray-800 text-white py-6">
+      <div className="container mx-auto text-center">
+        <p>&copy; 2025 Saylani Welfare. All rights reserved.</p>
+        <div className="mt-4">
+          <Link href="/contact" className="hover:underline mx-2">Contact Us</Link>
+          <Link href="/privacy" className="hover:underline mx-2">Privacy Policy</Link>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
