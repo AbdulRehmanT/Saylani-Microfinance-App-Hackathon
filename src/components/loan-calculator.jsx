@@ -50,7 +50,7 @@ const LoanCalculator = ({ selectedCategory }) => {
 
   const url = process.env.NODE_ENV === 'development'
   ? 'http://localhost:4000'
-  : 'https://saylani-microfinance-app-hackathon-backend.vercel.app/';
+  : 'https://saylani-microfinance-app-hackathon-backend.vercel.app';
 
 
   const calculateEMI = (loanAmount, initialDeposit) => {
