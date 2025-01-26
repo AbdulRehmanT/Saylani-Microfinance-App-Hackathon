@@ -1,8 +1,12 @@
-"use client";
-
+'use client'
 import { useState } from "react";
 
 const LoanRequestForm = () => {
+
+  const url = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:4000'
+  : 'https://saylani-microfinance-app-hackathon-backend.vercel.app';
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -27,10 +31,30 @@ const LoanRequestForm = () => {
     setFormData((prev) => ({ ...prev, guarantors: newGuarantors }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle loan request submission here
-    console.log("Loan Request Submitted:", formData);
+
+    try {
+      const response = await fetch(`${url}/api/loanRequest`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Loan Request Submitted:", data);
+        alert("Loan request submitted successfully!");
+      } else {
+        console.error("Error submitting loan request:", data);
+        alert("Error submitting loan request.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error connecting to the server.");
+    }
   };
 
   return (
@@ -73,7 +97,6 @@ const LoanRequestForm = () => {
               required
             />
           </div>
-
 
           {/* Guarantor Information */}
           {formData.guarantors.map((guarantor, index) => (
