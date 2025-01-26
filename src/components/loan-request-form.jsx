@@ -74,29 +74,6 @@ const LoanRequestForm = () => {
             />
           </div>
 
-          {/* Loan Information */}
-          <div>
-            <input
-              type="number"
-              name="loanAmount"
-              value={formData.loanAmount}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded-lg w-full"
-              placeholder="Loan Amount"
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              name="loanCategory"
-              value={formData.loanCategory}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded-lg w-full"
-              placeholder="Loan Category"
-              required
-            />
-          </div>
 
           {/* Guarantor Information */}
           {formData.guarantors.map((guarantor, index) => (
