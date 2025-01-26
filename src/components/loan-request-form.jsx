@@ -35,7 +35,7 @@ const LoanRequestForm = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${url}/api/loan-request`, {
+      const response = await fetch(`${url}/api/v1/loan-request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
