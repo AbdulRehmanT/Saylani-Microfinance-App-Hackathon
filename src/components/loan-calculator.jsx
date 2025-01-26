@@ -48,7 +48,10 @@ const LoanCalculator = ({ selectedCategory }) => {
   const [initialDeposit, setInitialDeposit] = useState(0);
   const [monthlyEMI, setMonthlyEMI] = useState(0);
 
-  const url = 'http://localhost:4000'
+  const url = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:4000'
+  : 'https://saylani-microfinance-app-hackathon-backend.vercel.app/';
+
 
   const calculateEMI = (loanAmount, initialDeposit) => {
     const annualInterestRate = 10;

@@ -9,7 +9,10 @@ const Registration = () => {
   const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const url = "http://localhost:4000";
+  const url = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:4000'
+  : 'https://saylani-microfinance-app-hackathon-backend.vercel.app/';
+
 
   const router = useRouter();
 
