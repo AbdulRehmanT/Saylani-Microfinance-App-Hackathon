@@ -3,7 +3,7 @@ import LoanCalculator from "@/components/loan-calculator";
 const LoanCalculatorPage = () => {
   return (
     <div>
-      <LoanCalculator />
+      <LoanCalculator selectedCategory={null} />
     </div>
   );
 };

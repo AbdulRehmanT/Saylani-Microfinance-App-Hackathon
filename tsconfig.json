@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/loan-categories.jsx", "src/components/loan-request-form.jsx", "src/components/loan-calculator.jsx", "src/components/header.jsx", "src/components/footer.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/loan-categories.jsx", "src/components/loan-request-form.jsx", "src/components/loan-calculator.jsx", "src/components/header.jsx", "src/components/footer.jsx", "src/app/loan-calculator/page.jsx"],
   "exclude": ["node_modules"]
 }
