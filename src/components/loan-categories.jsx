@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link"; // Ensure you import Link
-import LoanCalculator from '@/components/loan-calculator'; // Import the LoanCalculator component
+import Link from "next/link"; 
+import LoanCalculator from '@/components/loan-calculator'; 
 
 const LoanCategories = () => {
   const categories = [

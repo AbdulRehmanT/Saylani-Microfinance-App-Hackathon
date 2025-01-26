@@ -1,16 +1,19 @@
-'use client'
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const Registration = () => {
   const [cnic, setCnic] = useState("");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  
+
+  const url = "http://localhost:4000";
+
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     // Simple validation
@@ -19,9 +22,28 @@ const Registration = () => {
       return;
     }
 
-    // Here, you can handle registration logic (e.g., send to backend)
-    // After registration, redirect to the loan request page
-    router.push("/loan-request");
+    try {
+      // Send registration details to backend
+      const response = await axios.post(`${url}/api/v1/register`, {
+        cnic,
+        email,
+        name,
+      });
+
+      // If registration is successful
+      alert(response.data.message);
+      router.push("/loan-request"); // Redirect to loan request page
+    } catch (error: unknown) {
+      console.error("Error during registration:", error);
+
+      // Type guard for AxiosError
+      if (axios.isAxiosError(error)) {
+        // Now that we know it's an AxiosError, we can safely access `response`
+        setErrorMessage(error.response?.data.message || "Registration failed.");
+      } else {
+        setErrorMessage("An unknown error occurred.");
+      }
+    }
   };
 
   return (
@@ -34,6 +56,7 @@ const Registration = () => {
             type="text"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg"
             value={cnic}
+            maxLength={13}
             onChange={(e) => setCnic(e.target.value)}
             placeholder="Enter CNIC"
           />

@@ -1,17 +1,18 @@
-'use client'
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 const LoanRequestForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    cnic: '',
-    address: '',
-    loanAmount: '',
-    loanCategory: '',
-    guarantors: [{ name: '', email: '', cnic: '', location: '' }, { name: '', email: '', cnic: '', location: '' }],
+    name: "",
+    phone: "",
+    address: "",
+    loanAmount: "",
+    loanCategory: "",
+    guarantors: [
+      { name: "", email: "", cnic: "", location: "" },
+      { name: "", email: "", cnic: "", location: "" },
+    ],
   });
 
   const handleChange = (e) => {
@@ -29,7 +30,7 @@ const LoanRequestForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle loan request submission here
-    console.log('Loan Request Submitted:', formData);
+    console.log("Loan Request Submitted:", formData);
   };
 
   return (
@@ -52,34 +53,12 @@ const LoanRequestForm = () => {
           </div>
           <div>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded-lg w-full"
-              placeholder="Email"
-              required
-            />
-          </div>
-          <div>
-            <input
               type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded-lg w-full"
               placeholder="Phone Number"
-              required
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              name="cnic"
-              value={formData.cnic}
-              onChange={handleChange}
-              className="p-2 border border-gray-300 rounded-lg w-full"
-              placeholder="CNIC"
               required
             />
           </div>
